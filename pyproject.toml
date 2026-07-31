@@ -1,3 +1,9 @@
+[project]
+name = "smart-expense-tracker-api"
+version = "1.0.0"
+description = "REST API to manage personal expenses, built with FastAPI and JSON file storage."
+requires-python = ">=3.11"
+
 [tool.pytest.ini_options]
 pythonpath = [".", "src"]
 testpaths = ["tests"]
