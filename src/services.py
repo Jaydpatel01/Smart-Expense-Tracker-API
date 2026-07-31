@@ -91,6 +91,9 @@ def calculate_totals(
         cat_name = str(
             e.category.value if hasattr(e.category, "value") else e.category
         ).lower()
+        # Round after each addition rather than at the end only — floating-point
+        # representation errors accumulate across multiple additions (e.g.
+        # 12.50 + 8.75 + 30.00 can produce 50.99999... without per-step rounding).
         by_category[cat_name] = round(by_category.get(cat_name, 0.0) + e.amount, 2)
 
     return TotalResponse(total=overall_total, by_category=by_category)
