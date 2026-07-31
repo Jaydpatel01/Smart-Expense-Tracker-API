@@ -6,7 +6,10 @@ from pathlib import Path
 from typing import List, Optional
 import uuid
 
-from models import Expense
+try:
+    from .models import Expense
+except (ImportError, ValueError):
+    from models import Expense
 
 
 class ExpenseStorage:

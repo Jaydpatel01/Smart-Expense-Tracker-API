@@ -1,8 +1,13 @@
 """Business logic layer for expense calculations, filtering, and summaries."""
 
 from typing import List, Optional
-from models import Expense, ExpenseCreate, TotalResponse
-from storage import ExpenseStorage, storage
+
+try:
+    from .models import Expense, ExpenseCreate, TotalResponse
+    from .storage import ExpenseStorage, storage
+except (ImportError, ValueError):
+    from models import Expense, ExpenseCreate, TotalResponse
+    from storage import ExpenseStorage, storage
 
 
 def create_expense(

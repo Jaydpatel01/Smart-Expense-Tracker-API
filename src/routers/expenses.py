@@ -3,13 +3,22 @@
 from typing import List, Optional
 from fastapi import APIRouter, HTTPException, Query, Response, status
 
-from models import ExpenseCategory, ExpenseCreate, ExpenseResponse, TotalResponse
-from services import (
-    calculate_totals,
-    create_expense,
-    delete_expense,
-    get_expenses,
-)
+try:
+    from ..models import ExpenseCategory, ExpenseCreate, ExpenseResponse, TotalResponse
+    from ..services import (
+        calculate_totals,
+        create_expense,
+        delete_expense,
+        get_expenses,
+    )
+except (ImportError, ValueError):
+    from models import ExpenseCategory, ExpenseCreate, ExpenseResponse, TotalResponse
+    from services import (
+        calculate_totals,
+        create_expense,
+        delete_expense,
+        get_expenses,
+    )
 
 router = APIRouter(prefix="/expenses", tags=["Expenses"])
 

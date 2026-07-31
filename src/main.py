@@ -1,7 +1,11 @@
 """FastAPI application entry point and configuration."""
 
 from fastapi import FastAPI
-from routers import expenses
+
+try:
+    from .routers import expenses
+except (ImportError, ValueError):
+    from routers import expenses
 
 app = FastAPI(
     title="Smart Expense Tracker API",
