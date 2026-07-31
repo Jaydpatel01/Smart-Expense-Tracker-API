@@ -26,7 +26,14 @@ ALLOWED_CATEGORIES = {c.value for c in ExpenseCategory}
 
 
 def _validate_category(category: Optional[str]) -> None:
-    """Validate that category parameter is one of the allowed categories."""
+    """Validate that category parameter is one of the allowed categories.
+
+    Returns HTTP 400, not 422. 422 Unprocessable Entity is FastAPI/Pydantic's
+    code for request body schema validation failures. A query parameter that is
+    syntactically valid but semantically wrong is a routing-level client error,
+    which maps to 400 Bad Request. Clients that branch on status code need this
+    distinction to differentiate body validation errors from parameter errors.
+    """
     if category is not None:
         cat_clean = category.strip().lower()
         if cat_clean not in ALLOWED_CATEGORIES:

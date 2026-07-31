@@ -11,7 +11,12 @@ import storage as storage_module
 
 @pytest_asyncio.fixture
 async def async_client():
-    """Async HTTPX client fixture used by existing async integration tests."""
+    """Async HTTPX client fixture used by existing async integration tests.
+
+    Must use @pytest_asyncio.fixture rather than plain @pytest.fixture.
+    With @pytest.fixture, pytest silently skips async functions and emits
+    a PytestUnhandledCoroutineWarning instead of running them.
+    """
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://testserver"
     ) as c:

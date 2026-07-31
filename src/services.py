@@ -10,6 +10,13 @@ except (ImportError, ValueError):
     from storage import ExpenseStorage, storage
 
 
+def _category_name(expense: Expense) -> str:
+    """Helper to safely extract the category string value."""
+    return str(
+        expense.category.value if hasattr(expense.category, "value") else expense.category
+    ).lower()
+
+
 def create_expense(
     data: ExpenseCreate, target_storage: Optional[ExpenseStorage] = None
 ) -> Expense:
@@ -49,10 +56,7 @@ def get_expenses(
     filtered = [
         e
         for e in expenses
-        if str(
-            e.category.value if hasattr(e.category, "value") else e.category
-        ).lower()
-        == category_lower
+        if _category_name(e) == category_lower
     ]
     return sorted(filtered, key=lambda e: e.date, reverse=True)
 
@@ -77,10 +81,7 @@ def calculate_totals(
         matching_expenses = [
             e
             for e in expenses
-            if str(
-                e.category.value if hasattr(e.category, "value") else e.category
-            ).lower()
-            == cat_clean
+            if _category_name(e) == cat_clean
         ]
         cat_total = round(sum(e.amount for e in matching_expenses), 2)
         return TotalResponse(total=cat_total, by_category={cat_clean: cat_total})
@@ -88,9 +89,10 @@ def calculate_totals(
     overall_total = round(sum(e.amount for e in expenses), 2)
     by_category: dict[str, float] = {}
     for e in expenses:
-        cat_name = str(
-            e.category.value if hasattr(e.category, "value") else e.category
-        ).lower()
+        cat_name = _category_name(e)
+        # Round after each addition rather than at the end only — floating-point
+        # representation errors accumulate across multiple additions (e.g.
+        # 12.50 + 8.75 + 30.00 can produce 50.99999... without per-step rounding).
         by_category[cat_name] = round(by_category.get(cat_name, 0.0) + e.amount, 2)
 
     return TotalResponse(total=overall_total, by_category=by_category)
