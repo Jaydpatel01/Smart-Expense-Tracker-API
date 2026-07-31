@@ -4,7 +4,7 @@ from datetime import date, timedelta
 import pytest
 from pydantic import ValidationError
 
-from src.models import ExpenseCategory, ExpenseCreate, Expense, TotalResponse
+from models import ExpenseCategory, ExpenseCreate, Expense, TotalResponse
 
 
 def test_expense_create_valid():

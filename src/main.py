@@ -1,7 +1,7 @@
 """FastAPI application entry point and configuration."""
 
 from fastapi import FastAPI
-from src.routers import expenses
+from routers import expenses
 
 app = FastAPI(
     title="Smart Expense Tracker API",
